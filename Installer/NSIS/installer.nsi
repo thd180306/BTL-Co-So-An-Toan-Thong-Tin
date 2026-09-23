@@ -123,6 +123,7 @@ Section "Startup Scripts (required)" SEC_SCRIPTS
     File "..\Payload\app\Launch.vbs"
     File "..\Payload\app\Stop.vbs"
     File "..\Payload\app\Play-Game.vbs"
+    File "..\Payload\app\open-portals.vbs"
     File "..\Payload\app\app.properties"
     File /oname=icon.ico "app.ico"
 SectionEnd
@@ -161,7 +162,7 @@ Section -Post
 
     ; Grant Users full modify permissions on app directory and sandbox data
     nsExec::Exec 'icacls "$INSTDIR\app\data" /grant *S-1-5-32-545:(OI)(CI)M /T /Q'
-    nsExec::Exec 'icacls "$INSTDIR\app" /grant *S-1-5-32-545:(OI)(CI)M /Q'
+    nsExec::Exec 'icacls "$INSTDIR\app" /grant *S-1-5-32-545:(OI)(CI)M /T /Q'
 SectionEnd
 
 Section "Uninstall"
@@ -174,6 +175,7 @@ Section "Uninstall"
     Delete "$INSTDIR\app\service-web.bat"
     Delete "$INSTDIR\app\run-game.bat"
     Delete "$INSTDIR\app\Launch.vbs"
+    Delete "$INSTDIR\app\open-portals.vbs"
     Delete "$INSTDIR\app\app.properties"
 
     RMDir /r "$INSTDIR\runtime"

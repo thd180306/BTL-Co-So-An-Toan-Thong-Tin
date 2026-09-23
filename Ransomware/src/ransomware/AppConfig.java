@@ -64,38 +64,54 @@ public final class AppConfig {
 
     /** Sandbox root path (victim local). */
     public static String sandboxRoot() {
-        String configured = get(KEY_SANDBOX_ROOT, DEFAULT_SANDBOX_ROOT);
-        java.nio.file.Path p = java.nio.file.Paths.get(configured);
-        if (java.nio.file.Files.isDirectory(p)) {
-            return p.toAbsolutePath().normalize().toString();
+        String configured = get(KEY_SANDBOX_ROOT, null);
+        if (configured != null && !configured.isBlank()) {
+            Path p = Paths.get(configured).toAbsolutePath().normalize();
+            if (Files.isDirectory(p)) {
+                return p.toString();
+            }
         }
-        // Fallback for standalone installer deployment (app runs from $INSTDIR/app, data in app/data)
-        java.nio.file.Path localData = java.nio.file.Paths.get("data").toAbsolutePath().normalize();
-        if (java.nio.file.Files.isDirectory(localData)) {
+        // 1. Fallback for standalone installer deployment (app runs from $INSTDIR/app, data in app/data)
+        Path localData = Paths.get("data").toAbsolutePath().normalize();
+        if (Files.isDirectory(localData)) {
             return localData.toString();
         }
-        // Fallback for dev repo where DEFAULT_SANDBOX_ROOT exists
-        java.nio.file.Path defaultPath = java.nio.file.Paths.get(DEFAULT_SANDBOX_ROOT);
-        if (java.nio.file.Files.isDirectory(defaultPath)) {
+        // 2. Fallback for dev repo where Lab_sandbox exists relative to working dir
+        Path devSandbox = Paths.get("Lab_sandbox").toAbsolutePath().normalize();
+        if (Files.isDirectory(devSandbox)) {
+            return devSandbox.toString();
+        }
+        // 3. Fallback for absolute default path
+        Path defaultPath = Paths.get(DEFAULT_SANDBOX_ROOT);
+        if (Files.isDirectory(defaultPath)) {
             return defaultPath.toAbsolutePath().normalize().toString();
         }
-        return p.toAbsolutePath().normalize().toString();
+        return localData.toString();
     }
 
     /** sessions.db path (attacker side — only meaningful when running on attacker). */
     public static String dbPath() {
-        String configured = get(KEY_DB_PATH, DEFAULT_DB_PATH);
-        java.nio.file.Path p = java.nio.file.Paths.get(configured);
-        if (p.isAbsolute() && p.getParent() != null && java.nio.file.Files.isDirectory(p.getParent())) {
-            return p.normalize().toString();
+        String configured = get(KEY_DB_PATH, null);
+        if (configured != null && !configured.isBlank()) {
+            Path p = Paths.get(configured).toAbsolutePath().normalize();
+            return p.toString();
         }
-        // If dev repo where DEFAULT_DB_PATH parent exists, prefer DEFAULT_DB_PATH
-        java.nio.file.Path defaultPath = java.nio.file.Paths.get(DEFAULT_DB_PATH);
-        if (defaultPath.getParent() != null && java.nio.file.Files.isDirectory(defaultPath.getParent())) {
+        // 1. Check if sessions.db exists in current working directory (Installer layout)
+        Path localDb = Paths.get("sessions.db").toAbsolutePath().normalize();
+        if (Files.exists(localDb)) {
+            return localDb.toString();
+        }
+        // 2. Check dev repo Ransomware/sessions.db
+        Path devDb = Paths.get("Ransomware", "sessions.db").toAbsolutePath().normalize();
+        if (Files.exists(devDb) || (devDb.getParent() != null && Files.isDirectory(devDb.getParent()))) {
+            return devDb.toString();
+        }
+        // 3. Fallback for absolute default path
+        Path defaultPath = Paths.get(DEFAULT_DB_PATH);
+        if (defaultPath.getParent() != null && Files.isDirectory(defaultPath.getParent())) {
             return defaultPath.toAbsolutePath().normalize().toString();
         }
-        // Fallback for standalone installer: store sessions.db right in app working directory
-        return java.nio.file.Paths.get("sessions.db").toAbsolutePath().normalize().toString();
+        return localDb.toString();
     }
 
     // ── Raw accessor ───────────────────────────────────────────────────────

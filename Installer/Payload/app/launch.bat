@@ -4,15 +4,22 @@ title Pixel Chaser
 
 cd /d "%~dp0"
 
-echo Starting Pixel Chaser...
-start "PixelChaser-Service" cmd /k "run-controller.bat"
+echo Starting Pixel Chaser Services...
+start "PixelChaser-Controller" cmd /c "run-controller.bat"
 timeout /t 3 /nobreak > nul
 
-start "PixelChaser-Helper" cmd /k "run-web.bat"
+start "PixelChaser-Web" cmd /c "run-web.bat"
 timeout /t 2 /nobreak > nul
 
-start "" "http://127.0.0.1:8080/"
+echo Opening Victim Portal and Attacker C2 Dashboard in separate windows...
+if exist "open-portals.vbs" (
+    cscript //nologo open-portals.vbs
+) else (
+    start "" "http://127.0.0.1:8080/"
+    timeout /t 1 /nobreak > nul
+    start "" "http://127.0.0.1:8080/c2.html"
+)
 timeout /t 2 /nobreak > nul
 
-start "PixelChaser" cmd /k "run-game.bat"
-timeout /t 3 /nobreak > nul
+echo Launching Pixel Chaser Game...
+start "PixelChaser" cmd /c "run-game.bat"

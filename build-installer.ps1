@@ -29,6 +29,9 @@ Copy-Item (Join-Path $BuildDir "PixelChaser.jar") (Join-Path $PayloadApp "game\P
 if (Test-Path (Join-Path $BuildDir "app.properties")) {
     Copy-Item (Join-Path $BuildDir "app.properties") (Join-Path $PayloadApp "app.properties") -Force
 }
+if (Test-Path (Join-Path $ProjectRoot "open-portals.vbs")) {
+    Copy-Item (Join-Path $ProjectRoot "open-portals.vbs") (Join-Path $PayloadApp "open-portals.vbs") -Force
+}
 
 # Step 3: Sync latest Docs and Web Portal
 Write-Host "[3/4] Synchronizing Docs and Web Portal into Payload..."

