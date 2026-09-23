@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Chaser — C2 & Recovery Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <div class="brand">
+      <div class="logo">PC</div>
+      <div>
+        <div class="brand-title">PIXEL CHASER</div>
+        <div class="brand-subtitle">C2 &amp; Recovery Portal</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="role-badge victim-badge">VICTIM &amp; ATTACKER GATEWAY</div>
+      <div id="connectionStatus" class="connection offline">CONTROLLER OFFLINE</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">CYBERSECURITY LAB SIMULATION</div>
+      <h1>Decryption Key Distribution Center</h1>
+      <p>Connect your Session to verify payment and receive the RSA-4096 Private Decryption Key.</p>
+    </section>
+
+    <!-- Search / Manual Input Box for Recovery ID -->
+    <section class="card lookup-card">
+      <div class="section-title">Step 1 — Connect Your Session</div>
+      <div class="lookup-bar">
+        <input type="text" id="manualRidInput" placeholder="Enter Recovery ID (e.g. RCV-20260923-XXXXXX)" spellcheck="false">
+        <button id="lookupBtn" class="secondary-button">Lookup Session</button>
+        <button id="latestBtn" class="text-button">Fetch Latest</button>
+      </div>
+    </section>
+
+    <!-- Main Session & Key Management Card -->
+    <section class="card">
+      <div class="section-title">Step 2 — Session &amp; Payment Status</div>
+
+      <div id="noSession" class="empty">
+        <div class="empty-icon">?</div>
+        <h2>No Active Session Selected</h2>
+        <p>Enter your <b>Recovery ID</b> from the Wana Decrypt0r window above, or launch Pixel Chaser.</p>
+      </div>
+
+      <div id="sessionPanel" class="hidden">
+        <div class="info-grid">
+          <div class="info-box">
+            <span>Recovery ID</span>
+            <strong id="recoveryId">-</strong>
+          </div>
+          <div class="info-box">
+            <span>Instance ID</span>
+            <strong id="instanceId">-</strong>
+          </div>
+        </div>
+
+        <div class="status-area">
+          <div class="status-row">
+            <span>Session status:</span>
+            <strong id="sessionStatus">-</strong>
+          </div>
+          <div class="status-row">
+            <span>Ransom demand:</span>
+            <strong style="color:#f59e0b;">$300 USD (Demo Bitcoin)</strong>
+          </div>
+          <div class="status-row">
+            <span>Payment status:</span>
+            <strong id="paymentStatus">-</strong>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="step" id="stepPending">
+            <div class="step-number">1</div>
+            <div>
+              <strong>Payment Pending</strong>
+              <span>Awaiting victim payment confirmation</span>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="stepConfirmed">
+            <div class="step-number">2</div>
+            <div>
+              <strong>Payment Confirmed</strong>
+              <span>Attacker verified receipt in database</span>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="stepAvailable">
+            <div class="step-number">3</div>
+            <div>
+              <strong>Key Released</strong>
+              <span>Private Key dispatched to victim</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-area">
+          <button id="payButton" class="primary-button">CONFIRM DEMO PAYMENT ($300)</button>
+          <div id="actionMessage" class="action-message"></div>
+        </div>
+
+        <!-- NEW: Private Key Release Section -->
+        <div id="keyReleaseCard" class="key-card hidden">
+          <div class="key-header">
+            <span class="key-badge">🔑 PRIVATE KEY RELEASED</span>
+            <span class="key-subtitle">Copy this key into your Wana Decrypt0r window to restore files</span>
+          </div>
+          <div class="key-box">
+            <textarea id="privateKeyText" readonly rows="5" spellcheck="false" placeholder="Loading released private key..."></textarea>
+            <div class="key-actions">
+              <button id="copyKeyBtn" class="primary-button copy-btn">📋 Copy Private Key</button>
+              <span id="copyFeedback" class="copy-feedback"></span>
+            </div>
+          </div>
+          <div class="restore-guide">
+            <strong>Next Steps:</strong>
+            <ol>
+              <li>Click <b>Copy Private Key</b> above.</li>
+              <li>Switch to the <b>Wana Decrypt0r 2.0</b> window on your desktop.</li>
+              <li>Paste into <b>Enter Private Key</b> and click <b>[Decrypt]</b>.</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LIVE FILE SANDBOX MONITOR -->
+    <section class="card" id="sandboxCard">
+      <div class="card-header-flex">
+        <div class="section-title" style="margin-bottom:0;">Live Sandbox Directory Monitor (Victim Files)</div>
+        <button id="refreshFilesBtn" class="text-button small-btn">🔄 Refresh Files</button>
+      </div>
+      <p style="color:#94a3b8; font-size:12px; margin: 8px 0 16px;">
+        Tracking files in <code>Lab_sandbox\working\</code> in real-time. Notice how file extensions change from normal to <b>.locked</b>, and back to normal upon decryption.
+      </p>
+      <div id="sandboxFileList" class="sandbox-grid">
+        <div class="file-item-empty">Connect a session or trigger game close to inspect files.</div>
+      </div>
+    </section>
+
+    <!-- ATTACKER C2 DATABASE LIVE INSPECTOR -->
+    <section class="card" id="dbCard">
+      <div class="card-header-flex">
+        <div class="section-title" style="margin-bottom:0;">Attacker C2 Database Live Inspector (sessions.db)</div>
+        <button id="refreshDbBtn" class="text-button small-btn">🔄 Refresh Database</button>
+      </div>
+      <p style="color:#94a3b8; font-size:12px; margin: 8px 0 16px;">
+        Direct live view into the attacker SQLite database (<code>sessions.db</code>). Demonstrates how Session IDs, RSA-4096 Keys, and SHA-256 File Manifests are managed server-side.
+      </p>
+
+      <!-- DB Tabs -->
+      <div class="db-tabs">
+        <button class="db-tab-btn active" data-tab="tabSessions">Table: sessions</button>
+        <button class="db-tab-btn" data-tab="tabKeys">Table: recovery_keys</button>
+        <button class="db-tab-btn" data-tab="tabManifest">Table: file_manifest (SHA-256)</button>
+      </div>
+
+      <!-- Tab 1: Sessions -->
+      <div id="tabSessions" class="db-tab-content">
+        <div class="table-container">
+          <table class="db-table" id="tableSessions">
+            <thead>
+              <tr>
+                <th>Session ID</th>
+                <th>Recovery ID</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5" class="table-empty">Loading sessions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Recovery Keys -->
+      <div id="tabKeys" class="db-tab-content hidden">
+        <div class="table-container">
+          <table class="db-table" id="tableKeys">
+            <thead>
+              <tr>
+                <th>Recovery ID</th>
+                <th>Key ID</th>
+                <th>Key Status</th>
+                <th>Key Length</th>
+                <th>Released At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5" class="table-empty">Loading keys...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: File Manifest -->
+      <div id="tabManifest" class="db-tab-content hidden">
+        <div class="table-container">
+          <table class="db-table" id="tableManifest">
+            <thead>
+              <tr>
+                <th>Recovery ID</th>
+                <th>Original File</th>
+                <th>Original SHA-256</th>
+                <th>Current File</th>
+                <th>Restore Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5" class="table-empty">Loading file manifest...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- System info -->
+    <section class="card small-card">
+      <div class="section-title">System information</div>
+      <div class="system-line">Controller: <span>127.0.0.1:5000</span></div>
+      <div class="system-line">Portal Backend: <span>127.0.0.1:8080</span></div>
+      <div class="system-line">Attacker Key Storage: <span>sessions.db (SQLite recovery_keys table)</span></div>
+      <div class="system-line">Victim Sandbox Target: <span>Lab_sandbox\working\</span></div>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Pixel Chaser — NovaBit Studios</title>
+  <!--
+    DEMO ARTIFACT — University Capstone Project
+    Static landing page. No credential collection. No external calls.
+    Download URL configured in app.js → const DOWNLOAD_URL
+  -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       NAV BAR
+  ════════════════════════════════════════════ -->
+  <header id="site-header">
+    <nav class="nav-inner">
+
+      <!-- Logo -->
+      <a href="#hero" class="nav-logo" aria-label="NovaBit Studios home">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+          <rect x="0"  y="0"  width="12" height="12" fill="#e94560"/>
+          <rect x="16" y="0"  width="12" height="12" fill="#f5a623"/>
+          <rect x="0"  y="16" width="12" height="12" fill="#00d4aa"/>
+          <rect x="16" y="16" width="12" height="12" fill="#533483"/>
+        </svg>
+        <span class="nav-logo-text">NovaBit<em>Studios</em></span>
+      </a>
+
+      <!-- Hamburger toggle (mobile) -->
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Nav links -->
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="#hero"         class="nav-link" data-section="hero">Home</a></li>
+        <li><a href="#project"      class="nav-link" data-section="project">Game Project</a></li>
+        <li><a href="#screenshots"  class="nav-link" data-section="screenshots">Screenshots</a></li>
+        <li><a href="#tester"       class="nav-link" data-section="tester">Tester Program</a></li>
+        <li><a href="#requirements" class="nav-link" data-section="requirements">System Requirements</a></li>
+        <li>
+          <!-- Download CTA in nav — href set by app.js via DOWNLOAD_URL constant -->
+          <a href="#download" class="nav-link nav-cta" id="nav-download-btn">Download</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ════════════════════════════════════════════
+         HERO
+    ════════════════════════════════════════════ -->
+    <section id="hero" class="section section-hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-grid"></div>
+        <div class="hero-pixel p1" aria-hidden="true"></div>
+        <div class="hero-pixel p2" aria-hidden="true"></div>
+        <div class="hero-pixel p3" aria-hidden="true"></div>
+      </div>
+      <div class="container hero-content">
+        <div class="hero-badge">Beta 0.0.0.1 &nbsp;·&nbsp; Now Recruiting Testers</div>
+        <h1 class="hero-title">
+          PIXEL<br><span class="hero-accent">CHASER</span>
+        </h1>
+        <p class="hero-tagline">
+          Chase. Dash. Survive.<br>
+          A neon arcade sprint where every coin counts.
+        </p>
+        <div class="hero-actions">
+          <!--
+            Primary CTA — href injected by app.js from DOWNLOAD_URL constant.
+            Fallback href="#download" scrolls to download section.
+          -->
+          <a href="#download"
+             class="btn btn-primary btn-large"
+             id="hero-download-btn"
+             aria-label="Download Pixel Chaser installer">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 16l-6-6h4V4h4v6h4l-6 6zm-8 4h16v-2H4v2z"/></svg>
+            Download Free
+          </a>
+          <a href="#tester" class="btn btn-outline btn-large">Join Tester Program</a>
+        </div>
+        <p class="hero-meta">Windows 10/11 &nbsp;·&nbsp; Java 15+ &nbsp;·&nbsp; 50 MB &nbsp;·&nbsp; Free</p>
+      </div>
+      <div class="hero-scroll-hint" aria-hidden="true">&#8595;</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         PROJECT / SYNOPSIS
+    ════════════════════════════════════════════ -->
+    <section id="project" class="section section-dark">
+      <div class="container">
+        <div class="section-label">Game Project</div>
+        <h2 class="section-title">What is Pixel Chaser?</h2>
+
+        <div class="project-grid">
+          <div class="project-text">
+            <p>
+              <strong>Pixel Chaser</strong> is an arcade-style 2D chase game built from the
+              ground up in Java Swing by the NovaBit Studios team. You control a nimble pixel
+              character on a neon grid world, racing to collect golden coins before a relentless
+              enemy closes in.
+            </p>
+            <p>
+              The twist: every coin you collect speeds up your pursuer. The challenge escalates
+              fast — manage your <strong>stamina bar</strong>, time your <strong>dash</strong>,
+              and outmanoeuvre the enemy to climb the high-score table.
+            </p>
+            <p>
+              Built as a passion project with zero external dependencies, Pixel Chaser ships
+              with its own runtime. Download, double-click, play.
+            </p>
+          </div>
+
+          <div class="project-stats">
+            <div class="stat-card">
+              <div class="stat-value">Java</div>
+              <div class="stat-label">Pure Swing — no frameworks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">60 FPS</div>
+              <div class="stat-label">Dedicated game-loop thread</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">3 Langs</div>
+              <div class="stat-label">VI / EN / ZH localisation</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">50 MB</div>
+              <div class="stat-label">Bundled runtime included</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon" style="background:#e94560;">&#9650;</div>
+            <div>
+              <strong>Escalating difficulty</strong>
+              <span>Enemy speed increases with every coin collected</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" style="background:#f5a623;">&#9889;</div>
+            <div>
+              <strong>Dash mechanic</strong>
+              <span>Hold SPACE to burst-sprint — stamina limited</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" style="background:#00d4aa;">&#9733;</div>
+            <div>
+              <strong>High-score tracking</strong>
+              <span>Per-session best score saved automatically</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" style="background:#533483;">&#9829;</div>
+            <div>
+              <strong>Particle effects</strong>
+              <span>Coin collection, dash trail, and game-over burst</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SCREENSHOTS
+    ════════════════════════════════════════════ -->
+    <section id="screenshots" class="section section-mid">
+      <div class="container">
+        <div class="section-label">Screenshots</div>
+        <h2 class="section-title">Gameplay Gallery</h2>
+        <p class="section-sub">
+          Visual placeholders — replace with actual in-game screenshots before the demo.
+        </p>
+
+        <div class="screenshot-grid">
+
+          <div class="screenshot-frame">
+            <div class="screenshot-img" style="
+              background: linear-gradient(135deg, #0f3460 0%, #16213e 40%, #1a1a2e 100%);
+            " aria-label="Screenshot placeholder: Main Menu">
+              <!-- Simulated pixel art / menu mockup -->
+              <div class="ss-pixel-row">
+                <span style="background:#f5a623;"></span>
+                <span style="background:#e94560;"></span>
+                <span style="background:#00d4aa;"></span>
+                <span style="background:#533483;"></span>
+              </div>
+              <div class="ss-label-big">PIXEL CHASER</div>
+              <div class="ss-label-small">Main Menu</div>
+              <div class="ss-menu-items">
+                <div class="ss-menu-item active">▶ NEW GAME</div>
+                <div class="ss-menu-item">  LANGUAGE</div>
+                <div class="ss-menu-item">  TUTORIAL</div>
+                <div class="ss-menu-item">  EXIT GAME</div>
+              </div>
+            </div>
+            <div class="screenshot-caption">
+              <strong>Main Menu</strong> — NovaBit Studios title screen with language selector
+            </div>
+          </div>
+
+          <div class="screenshot-frame">
+            <div class="screenshot-img" style="
+              background: linear-gradient(135deg, #0a0a14 0%, #1c1c2e 60%, #101028 100%);
+            " aria-label="Screenshot placeholder: Gameplay">
+              <div class="ss-grid-overlay" aria-hidden="true"></div>
+              <div class="ss-entity ss-player" title="Player"></div>
+              <div class="ss-entity ss-enemy" title="Enemy"></div>
+              <div class="ss-entity ss-coin" title="Coin"></div>
+              <div class="ss-hud">
+                <span class="ss-hud-score">SCORE: 80</span>
+                <span class="ss-hud-high">BEST: 150</span>
+              </div>
+              <div class="ss-label-small" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);">In-Game — Gameplay Loop</div>
+            </div>
+            <div class="screenshot-caption">
+              <strong>Gameplay</strong> — Chase sequence with HUD, minimap and stamina bar
+            </div>
+          </div>
+
+          <div class="screenshot-frame">
+            <div class="screenshot-img" style="
+              background: linear-gradient(135deg, #1a0a1a 0%, #2a1040 60%, #16102e 100%);
+            " aria-label="Screenshot placeholder: Pause Screen">
+              <div class="ss-pause-overlay" aria-hidden="true"></div>
+              <div class="ss-pause-panel">
+                <div class="ss-label-big" style="font-size:1rem;margin-bottom:12px;">TẠM DỪNG</div>
+                <div class="ss-menu-item active" style="font-size:0.7rem;">▶ TIẾP TỤC</div>
+                <div class="ss-menu-item"        style="font-size:0.7rem;">  MENU CHÍNH</div>
+                <div class="ss-menu-item"        style="font-size:0.7rem;">  THOÁT GAME</div>
+              </div>
+              <div class="ss-label-small" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);">Pause Screen — Vietnamese</div>
+            </div>
+            <div class="screenshot-caption">
+              <strong>Pause Menu</strong> — Localised UI in Vietnamese with resume/exit options
+            </div>
+          </div>
+
+          <div class="screenshot-frame">
+            <div class="screenshot-img" style="
+              background: linear-gradient(135deg, #1a0810 0%, #2a1020 50%, #0e0e16 100%);
+            " aria-label="Screenshot placeholder: Game Over">
+              <div class="ss-gameover-overlay" aria-hidden="true"></div>
+              <div style="text-align:center;position:relative;z-index:2;">
+                <div class="ss-label-big" style="color:#e94560;font-size:1.2rem;margin-bottom:8px;">WASTED!</div>
+                <div style="font-size:0.65rem;color:#c0c8e0;margin-bottom:4px;">SCORE: 120</div>
+                <div style="font-size:0.6rem;color:#f5a623;">HIGH SCORE: 150</div>
+                <div style="font-size:0.55rem;color:#606880;margin-top:12px;">Press ENTER to Restart</div>
+              </div>
+            </div>
+            <div class="screenshot-caption">
+              <strong>Game Over</strong> — Score summary with particle burst effect
+            </div>
+          </div>
+
+        </div>
+        <p class="placeholder-note">
+          &#9632; Placeholder frames — replace with actual PNG/JPEG screenshots in
+          <code>Landing_Page/img/</code> and update <code>index.html</code> accordingly.
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         TESTER PROGRAM
+    ════════════════════════════════════════════ -->
+    <section id="tester" class="section section-dark">
+      <div class="container">
+        <div class="section-label">Tester Program</div>
+        <h2 class="section-title">Become a Beta Tester</h2>
+        <p class="section-sub">
+          We're looking for dedicated players to help us polish Pixel Chaser before
+          the public release. Testers get early access, direct contact with the dev team,
+          and their names in the credits.
+        </p>
+
+        <div class="tester-grid">
+          <div class="tester-card">
+            <div class="tester-card-icon">&#9654;</div>
+            <h3>What you'll do</h3>
+            <ul class="tester-list">
+              <li>Play a minimum of one full session per week</li>
+              <li>Submit bug reports via the feedback form</li>
+              <li>Note any performance issues or visual glitches</li>
+              <li>Test all three language modes (VI / EN / ZH)</li>
+              <li>Verify scoring and high-score persistence</li>
+            </ul>
+          </div>
+
+          <div class="tester-card tester-card-highlight">
+            <div class="tester-card-icon">&#9733;</div>
+            <h3>What you'll get</h3>
+            <ul class="tester-list">
+              <li>Early access to all beta builds</li>
+              <li>Direct feedback channel with developers</li>
+              <li>Name in the game credits</li>
+              <li>Exclusive "Founding Tester" badge</li>
+              <li>Priority access to future NovaBit titles</li>
+            </ul>
+          </div>
+
+          <div class="tester-card">
+            <div class="tester-card-icon">&#9660;</div>
+            <h3>How to join</h3>
+            <ul class="tester-list">
+              <li>Download and install Pixel Chaser below</li>
+              <li>Launch the game and complete one session</li>
+              <li>Follow the in-game prompt after closing</li>
+              <li>Submit your session report via the portal</li>
+              <li>Wait for confirmation email from the team</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tester-notice">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="#f5a623" d="M12 2L1 21h22L12 2zm0 3.5L20.5 19h-17L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+          Limited spots available for this beta cycle. Invitation emails are sent in batches.
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SYSTEM REQUIREMENTS
+    ════════════════════════════════════════════ -->
+    <section id="requirements" class="section section-mid">
+      <div class="container">
+        <div class="section-label">System Requirements</div>
+        <h2 class="section-title">Can You Run It?</h2>
+
+        <div class="req-grid">
+          <table class="req-table" aria-label="Minimum system requirements">
+            <caption>Minimum</caption>
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Minimum</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>OS</td>
+                <td>Windows 10 (64-bit)</td>
+              </tr>
+              <tr>
+                <td>CPU</td>
+                <td>Dual-core 1.5 GHz</td>
+              </tr>
+              <tr>
+                <td>RAM</td>
+                <td>512 MB</td>
+              </tr>
+              <tr>
+                <td>Disk</td>
+                <td>100 MB free</td>
+              </tr>
+              <tr>
+                <td>Java</td>
+                <td>Bundled (JDK 26) — no install needed</td>
+              </tr>
+              <tr>
+                <td>Display</td>
+                <td>960 × 720 or larger</td>
+              </tr>
+              <tr>
+                <td>Audio</td>
+                <td>Any (effects generated programmatically)</td>
+              </tr>
+              <tr>
+                <td>Network</td>
+                <td>Not required for gameplay</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="req-table" aria-label="Recommended system requirements">
+            <caption>Recommended</caption>
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Recommended</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>OS</td>
+                <td>Windows 11 (64-bit)</td>
+              </tr>
+              <tr>
+                <td>CPU</td>
+                <td>Dual-core 2.0 GHz+</td>
+              </tr>
+              <tr>
+                <td>RAM</td>
+                <td>2 GB</td>
+              </tr>
+              <tr>
+                <td>Disk</td>
+                <td>200 MB free</td>
+              </tr>
+              <tr>
+                <td>Java</td>
+                <td>Bundled (JDK 26) — included in installer</td>
+              </tr>
+              <tr>
+                <td>Display</td>
+                <td>1280 × 720 or larger</td>
+              </tr>
+              <tr>
+                <td>Audio</td>
+                <td>Speakers or headphones recommended</td>
+              </tr>
+              <tr>
+                <td>Network</td>
+                <td>Local network for tester portal access</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="req-note">
+          &#9633; The installer bundles a 64-bit JDK 26. You do <strong>not</strong> need
+          Java installed on your system. Windows 10/11 64-bit only.
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         DOWNLOAD
+    ════════════════════════════════════════════ -->
+    <section id="download" class="section section-download">
+      <div class="container download-content">
+        <div class="section-label" style="color:#00d4aa;">Download</div>
+        <h2 class="section-title" style="color:#fff;">Ready to Play?</h2>
+        <p class="section-sub" style="color:#a0a8c0;max-width:520px;margin:0 auto 36px;">
+          Download the self-contained installer. No Java required — the runtime is bundled.
+          Runs entirely on localhost; no internet connection needed.
+        </p>
+
+        <!--
+          Primary download button.
+          href is SET BY app.js using the DOWNLOAD_URL constant.
+          Fallback href is the direct relative path.
+          data-download-url attribute is the single source of truth
+          read by app.js — change it there (const DOWNLOAD_URL).
+        -->
+        <a href="../Installer/Output/PixelChaser_Setup.exe"
+           class="btn btn-primary btn-xlarge"
+           id="main-download-btn"
+           download>
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 16l-6-6h4V4h4v6h4l-6 6zm-8 4h16v-2H4v2z"/>
+          </svg>
+          Download Pixel Chaser
+        </a>
+
+        <div class="download-meta">
+          <span>&#9632; Version: Beta 0.0.0.1</span>
+          <span>&#9632; Size: ~50 MB</span>
+          <span>&#9632; Platform: Windows 10/11 (64-bit)</span>
+          <span>&#9632; Runtime: JDK 26 bundled</span>
+        </div>
+
+        <div class="download-path-note">
+          <code id="download-path-display">../Installer/Output/PixelChaser_Setup.exe</code>
+        </div>
+
+        <p class="download-disclaimer">
+          This is a university lab artifact. The installer runs in a controlled sandbox only.
+          No internet connection, no real payment, no data collection.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer id="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <svg width="20" height="20" viewBox="0 0 28 28" aria-hidden="true">
+          <rect x="0"  y="0"  width="12" height="12" fill="#e94560" opacity="0.7"/>
+          <rect x="16" y="0"  width="12" height="12" fill="#f5a623" opacity="0.7"/>
+          <rect x="0"  y="16" width="12" height="12" fill="#00d4aa" opacity="0.7"/>
+          <rect x="16" y="16" width="12" height="12" fill="#533483" opacity="0.7"/>
+        </svg>
+        <span>NovaBit Studios</span>
+      </div>
+      <div class="footer-links">
+        <a href="#hero">Home</a>
+        <a href="#project">Game Project</a>
+        <a href="#tester">Tester Program</a>
+        <a href="#download">Download</a>
+      </div>
+      <div class="footer-copy">
+        <p>&copy; 2026 NovaBit Studios (fictional entity — university capstone project)</p>
+        <p>Contact: <span class="footer-email">contact@novabit-studios.local</span></p>
+        <p class="footer-disclaimer">
+          Demo artifact only. No real studio. No real email. No credential collection.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

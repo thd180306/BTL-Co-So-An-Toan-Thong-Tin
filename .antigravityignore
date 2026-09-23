@@ -1,0 +1,18 @@
+# Bỏ qua các thư mục build và output
+build/
+out/
+dist/
+target/
+bin/
+
+# Bỏ qua các file log và tạm
+*.log
+*.tmp
+
+# Bỏ qua thư mục làm việc của sandbox
+Lab_sandbox/working/
+Lab_sandbox/restored/
+
+# Bỏ qua file database
+*.db
+*.sqlite

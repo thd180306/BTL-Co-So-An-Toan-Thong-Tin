@@ -1,0 +1,43 @@
+# ============================================================
+# .gitignore — Pixel Chaser Ransomware Simulation Project
+# ============================================================
+
+# --- Build outputs & compiled binaries ---
+build/
+out/
+target/
+bin/
+*.class
+
+# --- Heavy Vendor Runtimes (>100MB JRE binaries) ---
+# Tránh đẩy thư mục JRE nặng hơn 200MB lên GitHub
+Pixel Chaser/jre/
+Installer/Runtime/
+Installer/Payload/runtime/
+
+# --- Databases & Session logs ---
+# Không đẩy database chạy demo lên Git
+*.db
+*.db-journal
+*.sqlite
+*.log
+*.tmp
+
+# --- Sandbox Session data (Chỉ giữ lại baseline mẫu) ---
+Lab_sandbox/working/
+Lab_sandbox/restored/
+Lab_sandbox/manifest/
+!Lab_sandbox/baseline/
+
+# --- IDE & OS metadata ---
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+.agents/
+
+# --- Output Installer (Tùy chọn) ---
+# Nếu muốn đính kèm PixelChaser_Setup.exe (31.5MB) qua GitHub Releases, hãy bỏ comment dòng dưới:
+# Installer/Output/*.exe

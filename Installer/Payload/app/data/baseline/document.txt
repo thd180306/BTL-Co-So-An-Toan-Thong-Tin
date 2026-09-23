@@ -1,0 +1,10 @@
+Đây là tài liệu mẫu dùng cho demo mô phỏng an toàn thông tin.
+File này sẽ được xử lý (mã hóa/giải mã) trong môi trường Lab_sandbox.
+
+Nội dung bao gồm:
+- Dòng 1: Thông tin giả lập
+- Dòng 2: Không chứa dữ liệu thật
+- Dòng 3: Chỉ phục vụ mục đích học tập
+
+Demo: Pixel Chaser Ransomware Simulation
+Ngày tạo: 2026-09-23

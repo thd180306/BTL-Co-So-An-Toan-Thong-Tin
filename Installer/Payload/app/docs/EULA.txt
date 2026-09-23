@@ -1,0 +1,207 @@
+﻿================================================================
+NOVABIT STUDIOS - END-USER LICENSE AGREEMENT
+================================================================
+
+Pixel Chaser (the "Software")
+Version 1.0.0
+Copyright (c) 2026 NovaBit Studios. All rights reserved.
+
+----------------------------------------------------------------
+1. LICENSE GRANT
+----------------------------------------------------------------
+
+NovaBit Studios ("Licensor") grants you a non-exclusive, non-
+transferable, revocable, limited license to install and use one
+(1) copy of the Software on a single computer for personal,
+non-commercial entertainment purposes only, subject to the terms
+and conditions set forth in this Agreement.
+
+This license is granted to you, the end user, and is not
+transferable to any third party without the express written
+consent of the Licensor.
+
+----------------------------------------------------------------
+2. RESTRICTIONS
+----------------------------------------------------------------
+
+You may NOT:
+
+  (a) Copy, distribute, rent, lease, lend, sublicense, or
+      otherwise transfer the Software or any portion thereof
+      to any third party.
+
+  (b) Reverse engineer, decompile, disassemble, or otherwise
+      attempt to derive the source code of the Software, except
+      to the extent expressly permitted by applicable law.
+
+  (c) Modify, adapt, translate, or create derivative works
+      based on the Software or any portion thereof.
+
+  (d) Remove, alter, or obscure any copyright, trademark, or
+      other proprietary notices contained in or on the Software.
+
+  (e) Use the Software for any commercial purpose, including
+      but not limited to, use in a cybercafe, gaming center,
+      or any other commercial establishment.
+
+  (f) Use the Software in any manner that violates applicable
+      local, national, or international law.
+
+----------------------------------------------------------------
+3. SYSTEM REQUIREMENTS
+----------------------------------------------------------------
+
+The Software requires:
+
+  - Windows 10 or Windows 11 (64-bit)
+  - Processor: Dual-core 1.5 GHz or higher
+  - Memory: 512 MB RAM minimum (2 GB recommended)
+  - Disk space: 100 MB available
+  - Display: 960 x 720 or higher
+  - Java Runtime Environment (bundled with installer)
+
+The Licensor reserves the right to modify these requirements
+in future versions of the Software.
+
+----------------------------------------------------------------
+4. INTELLECTUAL PROPERTY
+----------------------------------------------------------------
+
+The Software, including but not limited to its source code,
+graphics, audio, music, text, and "applets" incorporated into
+the Software, is the property of NovaBit Studios and is protected
+by international copyright laws and treaties.
+
+The Software is licensed, not sold. This Agreement does not grant
+you any rights to trademarks or service marks of the Licensor.
+
+----------------------------------------------------------------
+5. THIRD-PARTY COMPONENTS
+----------------------------------------------------------------
+
+The Software may include third-party libraries and components
+distributed under their respective licenses. Such components are
+provided "AS IS" and are subject to their own terms and conditions,
+which are available upon request.
+
+Any third-party component included in the Software is provided
+solely for the purpose of enabling the Software's intended
+functionality and does not constitute an endorsement by the
+Licensor.
+
+----------------------------------------------------------------
+6. PRIVACY
+----------------------------------------------------------------
+
+The Software does not collect, transmit, or store any personal
+information. All game data, including save files and configuration,
+is stored locally on your machine and is not shared with the
+Licensor or any third party.
+
+No telemetry, analytics, or usage data is collected.
+
+----------------------------------------------------------------
+7. NO WARRANTY
+----------------------------------------------------------------
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NON-INFRINGEMENT.
+
+THE LICENSOR DOES NOT WARRANT THAT THE OPERATION OF THE SOFTWARE
+WILL BE UNINTERRUPTED OR ERROR-FREE, OR THAT DEFECTS IN THE
+SOFTWARE WILL BE CORRECTED.
+
+NO ORAL OR WRITTEN INFORMATION OR ADVICE GIVEN BY THE LICENSOR
+SHALL CREATE A WARRANTY, AND YOU MAY NOT RELY ON ANY SUCH
+INFORMATION OR ADVICE.
+
+----------------------------------------------------------------
+8. LIMITATION OF LIABILITY
+----------------------------------------------------------------
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT
+SHALL THE LICENSOR BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
+INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, WITHOUT
+LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS
+INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY
+LOSS) ARISING OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE,
+EVEN IF THE LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
+
+IN NO EVENT SHALL THE LICENSOR'S TOTAL LIABILITY TO YOU FOR ALL
+DAMAGES EXCEED THE AMOUNT ACTUALLY PAID BY YOU FOR THE SOFTWARE.
+
+----------------------------------------------------------------
+9. SUPPORT AND UPDATES
+----------------------------------------------------------------
+
+The Licensor may, but is not obligated to, provide support,
+updates, or patches for the Software.
+
+Any such updates shall be subject to the terms and conditions of
+this Agreement unless accompanied by separate terms.
+
+The Licensor reserves the right to discontinue support for any
+version of the Software at any time without notice.
+
+----------------------------------------------------------------
+10. TERMINATION
+----------------------------------------------------------------
+
+This Agreement is effective until terminated. Your rights under
+this Agreement will terminate automatically without notice from
+the Licensor if you fail to comply with any term of this
+Agreement.
+
+Upon termination, you must destroy all copies of the Software
+and all of its component parts.
+
+Termination of this Agreement does not limit any other rights
+the Licensor may have at law or in equity.
+
+----------------------------------------------------------------
+11. GOVERNING LAW
+----------------------------------------------------------------
+
+This Agreement shall be governed by and construed in accordance
+with the laws of the Socialist Republic of Vietnam, without
+regard to its conflict of law principles.
+
+Any dispute arising from this Agreement shall be resolved
+exclusively in the courts located in Hanoi, Vietnam.
+
+----------------------------------------------------------------
+12. ENTIRE AGREEMENT
+----------------------------------------------------------------
+
+This Agreement constitutes the entire agreement between you and
+the Licensor concerning the Software and supersedes all prior or
+contemporaneous oral or written communications, proposals, and
+representations with respect to the Software.
+
+If any provision of this Agreement is held to be unenforceable,
+the remaining provisions shall remain in full force and effect.
+
+----------------------------------------------------------------
+13. ACKNOWLEDGMENT
+----------------------------------------------------------------
+
+BY CLICKING "I ACCEPT" OR BY INSTALLING, COPYING, OR OTHERWISE
+USING THE SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS
+AGREEMENT, UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS
+AND CONDITIONS.
+
+IF YOU DO NOT AGREE TO THE TERMS OF THIS AGREEMENT, DO NOT
+INSTALL OR USE THE SOFTWARE.
+
+================================================================
+For questions about this Agreement, contact:
+
+    NovaBit Studios
+    legal@novabit-studios.local
+
+Thank you for choosing Pixel Chaser.
+
+================================================================

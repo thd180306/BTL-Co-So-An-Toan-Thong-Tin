@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Chaser — Victim Decryption Portal</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <div class="brand">
+      <div class="logo" style="background:#ef4444; color:#fff;">PC</div>
+      <div>
+        <div class="brand-title">PIXEL CHASER</div>
+        <div class="brand-subtitle">Victim Decryption Portal</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="role-badge victim-badge">VICTIM PORTAL</div>
+      <div id="connectionStatus" class="connection offline">GATEWAY OFFLINE</div>
+      <a href="c2.html" class="role-switch-link" title="Open Attacker C2 Dashboard (for presentation demo)">Switch to Attacker C2 →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow" style="color:#ef4444;">SECURITY INCIDENT RECOVERY</div>
+      <h1>Decryption Key Distribution Center</h1>
+      <p>Submit your Recovery ID to monitor payment verification and receive your RSA-4096 Private Decryption Key.</p>
+    </section>
+
+    <!-- Search / Manual Input Box for Recovery ID -->
+    <section class="card lookup-card">
+      <div class="section-title">Step 1 — Connect Your Session</div>
+      <div class="lookup-bar">
+        <input type="text" id="manualRidInput" placeholder="Enter Recovery ID (e.g. RCV-20260924-XXXXXX)" spellcheck="false">
+        <button id="lookupBtn" class="secondary-button">Lookup Session</button>
+      </div>
+    </section>
+
+    <!-- Main Session & Key Management Card (Victim View: Read-Only Status) -->
+    <section class="card">
+      <div class="section-title">Step 2 — Session &amp; Payment Status</div>
+
+      <div id="noSession" class="empty">
+        <div class="empty-icon">?</div>
+        <h2>No Active Session Selected</h2>
+        <p>Enter your <b>Recovery ID</b> from the Wana Decrypt0r window above, or launch Pixel Chaser.</p>
+      </div>
+
+      <div id="sessionPanel" class="hidden">
+        <div class="info-grid">
+          <div class="info-box">
+            <span>Recovery ID</span>
+            <strong id="recoveryId">-</strong>
+          </div>
+          <div class="info-box">
+            <span>Instance ID</span>
+            <strong id="instanceId">-</strong>
+          </div>
+        </div>
+
+        <div class="status-area">
+          <div class="status-row">
+            <span>Session status:</span>
+            <strong id="sessionStatus">-</strong>
+          </div>
+          <div class="status-row">
+            <span>Ransom demand:</span>
+            <strong style="color:#f59e0b;">$300 USD (Demo Bitcoin)</strong>
+          </div>
+          <div class="status-row">
+            <span>Payment status:</span>
+            <strong id="paymentStatus">-</strong>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="step" id="stepPending">
+            <div class="step-number">1</div>
+            <div>
+              <strong>Payment Pending</strong>
+              <span>Awaiting attacker payment verification</span>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="stepConfirmed">
+            <div class="step-number">2</div>
+            <div>
+              <strong>Payment Confirmed</strong>
+              <span>Attacker verified receipt in database</span>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="stepAvailable">
+            <div class="step-number">3</div>
+            <div>
+              <strong>Key Released</strong>
+              <span>Private Key dispatched to victim</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Passive Status Display: Victim CANNOT click, only observes status -->
+        <div id="paymentIndicator" class="victim-indicator-box indicator-pending">
+          <span class="indicator-icon" id="indicatorIcon">⏳</span>
+          <div class="indicator-text">
+            <strong id="indicatorTitle">Awaiting Attacker Payment Confirmation ($300 USD)</strong>
+            <p id="indicatorDesc">Ransom payment is currently awaiting verification by the attacker C2 server. Please stand by...</p>
+          </div>
+        </div>
+
+        <!-- Private Key Release Section (Revealed when attacker confirms payment) -->
+        <div id="keyReleaseCard" class="key-card hidden" style="margin-top: 24px;">
+          <div class="key-header">
+            <span class="key-badge">🔑 PRIVATE KEY RELEASED</span>
+            <span class="key-subtitle">Copy this key into your Wana Decrypt0r window to restore files</span>
+          </div>
+          <div class="key-box">
+            <textarea id="privateKeyText" readonly rows="5" spellcheck="false" placeholder="Loading released private key..."></textarea>
+            <div class="key-actions">
+              <button id="copyKeyBtn" class="primary-button copy-btn">📋 Copy Private Key</button>
+              <span id="copyFeedback" class="copy-feedback"></span>
+            </div>
+          </div>
+          <div class="restore-guide">
+            <strong>Next Steps for Recovery:</strong>
+            <ol>
+              <li>Click <b>Copy Private Key</b> above.</li>
+              <li>Switch to the <b>Wana Decrypt0r 2.0</b> window on your desktop.</li>
+              <li>Paste into <b>Enter Private Key</b> and click <b>[Decrypt]</b>.</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Chaser — Attacker C2 Dashboard</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <div class="brand">
+      <div class="logo" style="background:#8b5cf6; color:#fff;">C2</div>
+      <div>
+        <div class="brand-title">PIXEL CHASER</div>
+        <div class="brand-subtitle">Command &amp; Control Operations Console</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="role-badge attacker-badge">ATTACKER C2 CONSOLE</div>
+      <div id="connectionStatus" class="connection offline">CONTROLLER OFFLINE</div>
+      <a href="index.html" class="role-switch-link" title="Open Victim Recovery Portal">← View Victim Portal</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow" style="color:#a855f7;">C2 OPERATIONS &amp; MANAGEMENT</div>
+      <h1>Attacker Command &amp; Control Center</h1>
+      <p>Monitor victim sessions, verify ransom payments, release RSA-4096 private keys, and audit file manifests.</p>
+    </section>
+
+    <!-- Search / Target Session Selector -->
+    <section class="card lookup-card">
+      <div class="section-title">Step 1 — Target Session Selection</div>
+      <div class="lookup-bar">
+        <input type="text" id="manualRidInput" placeholder="Enter or select Recovery ID (e.g. RCV-20260924-XXXXXX)" spellcheck="false">
+        <button id="lookupBtn" class="secondary-button">Select Session</button>
+        <button id="latestBtn" class="text-button" style="color:#a855f7;">Fetch Latest Victim</button>
+      </div>
+    </section>
+
+    <!-- Main Session & Ransom Payment Management Card -->
+    <section class="card">
+      <div class="section-title">Step 2 — Session &amp; Ransom Payment Management</div>
+
+      <div id="noSession" class="empty">
+        <div class="empty-icon">?</div>
+        <h2>No Active Session Selected</h2>
+        <p>Click <b>Fetch Latest Victim</b> above or trigger a game close to monitor a victim session.</p>
+      </div>
+
+      <div id="sessionPanel" class="hidden">
+        <div class="info-grid">
+          <div class="info-box">
+            <span>Recovery ID</span>
+            <strong id="recoveryId">-</strong>
+          </div>
+          <div class="info-box">
+            <span>Instance ID</span>
+            <strong id="instanceId">-</strong>
+          </div>
+        </div>
+
+        <div class="status-area">
+          <div class="status-row">
+            <span>Session status:</span>
+            <strong id="sessionStatus">-</strong>
+          </div>
+          <div class="status-row">
+            <span>Ransom demand:</span>
+            <strong style="color:#f59e0b;">$300 USD (Demo Bitcoin)</strong>
+          </div>
+          <div class="status-row">
+            <span>Payment status:</span>
+            <strong id="paymentStatus">-</strong>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="step" id="stepPending">
+            <div class="step-number">1</div>
+            <div>
+              <strong>Payment Pending</strong>
+              <span>Awaiting victim payment submission</span>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="stepConfirmed">
+            <div class="step-number">2</div>
+            <div>
+              <strong>Payment Confirmed</strong>
+              <span>Attacker verified receipt in database</span>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="stepAvailable">
+            <div class="step-number">3</div>
+            <div>
+              <strong>Key Released</strong>
+              <span>Private Key dispatched to victim</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attacker Action Control: Only attacker can click to confirm payment -->
+        <div class="action-area">
+          <button id="payButton" class="primary-button" style="background:#f59e0b; color:#111827; font-weight:800;">CONFIRM DEMO PAYMENT ($300) — RELEASE KEY</button>
+          <div id="actionMessage" class="action-message"></div>
+        </div>
+
+        <!-- Attacker Private Key View Section -->
+        <div id="keyReleaseCard" class="key-card hidden">
+          <div class="key-header">
+            <span class="key-badge" style="background:rgba(168,85,247,0.2); color:#c084fc; border:1px solid rgba(168,85,247,0.4);">🔑 PRIVATE KEY RELEASED</span>
+            <span class="key-subtitle">Key is now available for victim download via /api/recovery/key/{rid}</span>
+          </div>
+          <div class="key-box">
+            <textarea id="privateKeyText" readonly rows="5" spellcheck="false" placeholder="Loading released private key..."></textarea>
+            <div class="key-actions">
+              <button id="copyKeyBtn" class="primary-button copy-btn" style="background:#8b5cf6;">📋 Copy Private Key</button>
+              <span id="copyFeedback" class="copy-feedback"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LIVE FILE SANDBOX MONITOR (ATTACKER ONLY) -->
+    <section class="card" id="sandboxCard">
+      <div class="card-header-flex">
+        <div class="section-title" style="margin-bottom:0;">Live Sandbox Directory Monitor (Victim Files)</div>
+        <button id="refreshFilesBtn" class="text-button small-btn">🔄 Refresh Files</button>
+      </div>
+      <p style="color:#94a3b8; font-size:12px; margin: 8px 0 16px;">
+        Real-time telemetry of victim files in <code>Lab_sandbox\working\</code>. Demonstrates file transitions between plaintext and <b>.locked</b> ciphertext.
+      </p>
+      <div id="sandboxFileList" class="sandbox-grid">
+        <div class="file-item-empty">Select an active session to monitor victim files.</div>
+      </div>
+    </section>
+
+    <!-- ATTACKER C2 DATABASE LIVE INSPECTOR (ATTACKER ONLY) -->
+    <section class="card" id="dbCard">
+      <div class="card-header-flex">
+        <div class="section-title" style="margin-bottom:0;">Attacker C2 Database Live Inspector (sessions.db)</div>
+        <button id="refreshDbBtn" class="text-button small-btn">🔄 Refresh Database</button>
+      </div>
+      <p style="color:#94a3b8; font-size:12px; margin: 8px 0 16px;">
+        Direct access to the attacker SQLite C2 database (<code>sessions.db</code>). Includes detailed inspection of RSA-4096 private keys and SHA-256 integrity logs.
+      </p>
+
+      <!-- DB Tabs -->
+      <div class="db-tabs">
+        <button class="db-tab-btn active" data-tab="tabSessions">Table: sessions</button>
+        <button class="db-tab-btn" data-tab="tabKeys">Table: recovery_keys</button>
+        <button class="db-tab-btn" data-tab="tabManifest">Table: file_manifest (SHA-256)</button>
+      </div>
+
+      <!-- Tab 1: Sessions -->
+      <div id="tabSessions" class="db-tab-content">
+        <div class="table-container">
+          <table class="db-table" id="tableSessions">
+            <thead>
+              <tr>
+                <th>Session ID</th>
+                <th>Recovery ID</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5" class="table-empty">Loading sessions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Recovery Keys (With Modal View Button) -->
+      <div id="tabKeys" class="db-tab-content hidden">
+        <div class="table-container">
+          <table class="db-table" id="tableKeys">
+            <thead>
+              <tr>
+                <th>Recovery ID</th>
+                <th>Key ID</th>
+                <th>Key Status</th>
+                <th>Key Length</th>
+                <th>Released At</th>
+                <th>Inspection</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" class="table-empty">Loading keys...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: File Manifest -->
+      <div id="tabManifest" class="db-tab-content hidden">
+        <div class="table-container">
+          <table class="db-table" id="tableManifest">
+            <thead>
+              <tr>
+                <th>Recovery ID</th>
+                <th>Original File</th>
+                <th>Original SHA-256</th>
+                <th>Current File</th>
+                <th>Restore Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5" class="table-empty">Loading file manifest...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- System info (ATTACKER ONLY) -->
+    <section class="card small-card">
+      <div class="section-title">Attacker Infrastructure &amp; System Information</div>
+      <div class="system-line">Controller: <span>127.0.0.1:5000</span></div>
+      <div class="system-line">Portal Backend: <span>127.0.0.1:8080</span></div>
+      <div class="system-line">Attacker Key Storage: <span>sessions.db (SQLite recovery_keys table)</span></div>
+      <div class="system-line">Victim Sandbox Target: <span>Lab_sandbox\working\</span></div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal Overlay for Attacker Key Inspection -->
+<div id="keyModal" class="modal-backdrop hidden">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div class="modal-title">🔑 Attacker C2 Private Key Inspector</div>
+      <button id="closeModalBtn" class="modal-close-btn" title="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-meta-row">
+        <div class="modal-meta-item">Recovery ID: <strong id="modalRecoveryId">-</strong></div>
+        <div class="modal-meta-item">Key ID: <strong id="modalKeyId">-</strong></div>
+        <div class="modal-meta-item">Spec: <strong>RSA-4096 PKCS#8 DER Base64</strong></div>
+        <div class="modal-meta-item">Status: <strong id="modalKeyStatus">-</strong></div>
+      </div>
+      <label style="font-size:12px; font-weight:700; color:#94a3b8;">Full Private Decryption Key (Base64):</label>
+      <textarea id="modalKeyText" class="modal-key-textarea" readonly spellcheck="false" placeholder="Loading key content..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button id="modalCopyBtn" class="primary-button small-btn" style="background:#8b5cf6;">📋 Copy Full Key</button>
+      <button id="modalCloseActionBtn" class="secondary-button small-btn">Close</button>
+      <span id="modalCopyFeedback" style="font-size:12px; margin-left:8px;"></span>
+    </div>
+  </div>
+</div>
+
+<script src="c2.js"></script>
+</body>
+</html>

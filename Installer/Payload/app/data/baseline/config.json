@@ -1,0 +1,14 @@
+{
+  "demo_name": "Pixel Chaser Ransomware Simulation",
+  "version": "1.0.0",
+  "environment": "Lab_sandbox",
+  "settings": {
+    "encryption_enabled": true,
+    "countdown_seconds": 2160,
+    "mock_payment": true
+  },
+  "test_data": {
+    "author": "University Capstone Project",
+    "purpose": "Academic demonstration only"
+  }
+}

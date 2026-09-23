@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Preview — Pixel Chaser Invite</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <style>
+    /* ============================================================
+       DEMO ARTIFACT — UNIVERSITY LAB PROJECT
+       This file does NOT send emails. It is a static preview tool.
+       ============================================================
+       CONFIGURABLE URL — change the single constant below:
+    ============================================================ */
+
+    :root {
+      --bg:        #0a0a14;
+      --surface:   #141428;
+      --surface2:  #1e1e38;
+      --border:    #2a2a50;
+      --accent:    #00d4aa;
+      --accent2:   #e94560;
+      --accent3:   #f5a623;
+      --purple:    #533483;
+      --text:      #c0c8e0;
+      --text-dim:  #606880;
+      --white:     #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 0;
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-right: auto;
+    }
+
+    .badge {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: 0.82; }
+    .btn:active { opacity: 0.65; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent2), var(--purple));
+      color: var(--white);
+    }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-tertiary {
+      background: var(--surface2);
+      color: var(--accent3);
+      border: 1px solid var(--border);
+    }
+
+    /* Copy feedback */
+    .btn-secondary.copied {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* ── URL display strip ── */
+    .url-strip {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      font-size: 11px;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .url-strip span.url-val {
+      color: var(--accent);
+      font-family: 'Consolas', 'Courier New', monospace;
+      word-break: break-all;
+    }
+
+    /* ── Main layout ── */
+    .main-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .main-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── Panel ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      flex: 1;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-red    { background: var(--accent2); }
+    .dot-yellow { background: var(--accent3); }
+    .dot-green  { background: var(--accent); }
+
+    /* ── iframe panel ── */
+    .iframe-wrap {
+      width: 100%;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    #html-iframe {
+      width: 100%;
+      height: 680px;
+      border: none;
+      display: block;
+    }
+
+    /* ── plain text panel ── */
+    #plaintext-panel {
+      display: none;
+    }
+    #plaintext-panel.visible {
+      display: block;
+    }
+
+    .plaintext-body {
+      padding: 20px 22px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 680px;
+      overflow-y: auto;
+    }
+
+    /* ── Footer note ── */
+    .footer-note {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 32px;
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .footer-note strong { color: var(--accent2); }
+  </style>
+</head>
+<body>
+
+  <script>
+    /* ============================================================
+       CONFIGURABLE LANDING URL — change this ONE value.
+       This is the only place the URL is defined in this file.
+       Replace it in Module 3 once the actual Web_Server URL is known.
+    ============================================================ */
+    const LANDING_URL = "http://127.0.0.1:8000/landing";
+
+    /* Inject the URL into the iframe src and buttons after load */
+    document.addEventListener("DOMContentLoaded", function () {
+
+      /* -- URL display strip -- */
+      document.getElementById("url-display").textContent = LANDING_URL;
+
+      /* -- "Open Landing Page" button -- */
+      var openBtn = document.getElementById("btn-open");
+      openBtn.href = LANDING_URL;
+
+      /* -- Load iframe with invite.html -- */
+      var iframe = document.getElementById("html-iframe");
+      iframe.src = "invite.html";
+
+      /* -- After iframe loads, inject LANDING_URL into it -- */
+      iframe.addEventListener("load", function () {
+        try {
+          var iDoc = iframe.contentDocument || iframe.contentWindow.document;
+          var links = iDoc.querySelectorAll('a[href="{{LANDING_URL}}"]');
+          links.forEach(function (a) { a.href = LANDING_URL; });
+          var spans = iDoc.querySelectorAll("span, p");
+          spans.forEach(function (el) {
+            if (el.textContent.trim() === "{{LANDING_URL}}") {
+              el.textContent = LANDING_URL;
+            }
+          });
+        } catch (e) {
+          /* cross-origin guard — safe to ignore in local file mode */
+        }
+      });
+
+      /* -- Load plain-text content -- */
+      fetch("invite.txt")
+        .then(function (r) { return r.text(); })
+        .then(function (txt) {
+          var replaced = txt.replace(/\{\{LANDING_URL\}\}/g, LANDING_URL);
+          document.getElementById("plaintext-content").textContent = replaced;
+        })
+        .catch(function () {
+          document.getElementById("plaintext-content").textContent =
+            "[Could not load invite.txt — open this page via a local server or file:// with fetch allowed]";
+        });
+
+      /* -- "Copy Landing URL" button -- */
+      var copyBtn = document.getElementById("btn-copy");
+      copyBtn.addEventListener("click", function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(LANDING_URL).then(function () {
+            showCopied(copyBtn);
+          });
+        } else {
+          /* Fallback for older browsers */
+          var ta = document.createElement("textarea");
+          ta.value = LANDING_URL;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          showCopied(copyBtn);
+        }
+      });
+
+      /* -- "Toggle Plain Text" button -- */
+      var toggleBtn = document.getElementById("btn-toggle");
+      var plainPanel = document.getElementById("plaintext-panel");
+      var htmlPanel  = document.getElementById("html-panel");
+      var toggled = false;
+      toggleBtn.addEventListener("click", function () {
+        toggled = !toggled;
+        if (toggled) {
+          plainPanel.classList.add("visible");
+          htmlPanel.style.display  = "none";
+          toggleBtn.textContent = "▣ Show HTML Version";
+        } else {
+          plainPanel.classList.remove("visible");
+          htmlPanel.style.display = "";
+          toggleBtn.textContent = "☰ Toggle Plain Text";
+        }
+      });
+    });
+
+    function showCopied(btn) {
+      var original = btn.textContent;
+      btn.textContent = "✓ Copied!";
+      btn.classList.add("copied");
+      setTimeout(function () {
+        btn.textContent = original;
+        btn.classList.remove("copied");
+      }, 1800);
+    }
+  </script>
+
+  <!-- ── Top bar ── -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-title">&#9632; NovaBit Studios — Email Preview</div>
+      <span class="badge">Demo Artifact</span>
+      <a  id="btn-open"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary">
+        &#9654; Open Landing Page
+      </a>
+      <button id="btn-copy"   class="btn btn-secondary">&#10697; Copy Landing URL</button>
+      <button id="btn-toggle" class="btn btn-tertiary">&#9776; Toggle Plain Text</button>
+    </div>
+  </div>
+
+  <!-- ── URL strip ── -->
+  <div class="url-strip">
+    <span>Landing URL:</span>
+    <span class="url-val" id="url-display"></span>
+  </div>
+
+  <!-- ── Main panels ── -->
+  <div class="main-layout">
+
+    <!-- HTML email panel -->
+    <div class="panel" id="html-panel">
+      <div class="panel-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="panel-label">invite.html — HTML Email Preview</span>
+      </div>
+      <div class="iframe-wrap">
+        <iframe id="html-iframe" title="invite.html preview" sandbox="allow-same-origin"></iframe>
+      </div>
+    </div>
+
+    <!-- Plain text panel (toggled) -->
+    <div class="panel" id="plaintext-panel">
+      <div class="panel-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="panel-label">invite.txt — Plain-Text Fallback</span>
+      </div>
+      <div class="plaintext-body" id="plaintext-content">Loading…</div>
+    </div>
+
+    <!-- Second panel (HTML is shown by default; plain-text replaces it on toggle) -->
+    <!-- When not toggled we show a mini info card as second column -->
+    <div class="panel" id="info-panel">
+      <div class="panel-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="panel-label">Preview Notes</span>
+      </div>
+      <div style="padding:22px 22px;font-size:13px;line-height:1.8;color:#a0a8c0;">
+
+        <p style="margin-bottom:14px;">
+          <strong style="color:#ffffff;">Studio:</strong> NovaBit Studios (fictional)
+        </p>
+        <p style="margin-bottom:14px;">
+          <strong style="color:#ffffff;">Game:</strong> Pixel Chaser — Java Swing arcade game
+        </p>
+        <p style="margin-bottom:14px;">
+          <strong style="color:#ffffff;">Template type:</strong> HTML email (inline CSS, table layout,
+          no JavaScript, no external assets)
+        </p>
+        <p style="margin-bottom:14px;">
+          <strong style="color:#ffffff;">Configurable URL token:</strong><br>
+          <code style="color:#00d4aa;background:#12122a;padding:3px 7px;border-radius:4px;
+                        font-size:12px;">{{LANDING_URL}}</code>
+          in <code style="color:#f5a623;">invite.html</code> and
+          <code style="color:#f5a623;">invite.txt</code>
+        </p>
+        <p style="margin-bottom:14px;">
+          <strong style="color:#ffffff;">JS constant in this file:</strong><br>
+          <code style="color:#00d4aa;background:#12122a;padding:3px 7px;border-radius:4px;
+                        font-size:12px;">const LANDING_URL = "...";</code>
+        </p>
+        <p style="margin-bottom:14px;">
+          <strong style="color:#ffffff;">To change the URL:</strong><br>
+          Edit the <code style="color:#f5a623;">LANDING_URL</code> constant at the top of
+          <code style="color:#f5a623;">preview.html</code>, and replace
+          <code style="color:#00d4aa;">{{LANDING_URL}}</code> in the two template files.
+        </p>
+
+        <div style="margin-top:24px;padding:14px;background:#0e0e1a;border-radius:6px;
+                    border:1px solid #2a2a44;">
+          <p style="font-size:11px;color:#e94560;font-weight:700;
+                    letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">
+            &#9888; Demo Notice
+          </p>
+          <p style="font-size:12px;color:#606880;line-height:1.7;">
+            This is a static presentation artifact for a university capstone project.
+            No emails are sent. No external services are contacted. No tracking is performed.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Footer note ── -->
+  <div class="footer-note">
+    <strong>DEMO ARTIFACT</strong> &mdash;
+    This preview page is part of a controlled university lab simulator.
+    It does not send emails, connect to external servers, collect credentials,
+    or perform any tracking. All content is static and local only.
+  </div>
+
+</body>
+</html>

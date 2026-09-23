@@ -1,0 +1,56 @@
+============================================================
+NovaBit Studios — Pixel Chaser Beta Tester Invitation
+============================================================
+
+Hello, Tester!
+
+You've been selected for our exclusive closed beta.
+
+The team at NovaBit Studios is thrilled to invite you to
+play-test Pixel Chaser — our fast-paced, arcade-style chase
+game built with pure Java and Swing.
+
+In Pixel Chaser you control a nimble pixel character navigating
+a neon grid, collecting gold coins while evading an
+ever-accelerating enemy. Your stamina bar and dash ability are
+the only things standing between you and the leaderboard.
+
+------------------------------------------------------------
+WHAT TO EXPECT
+------------------------------------------------------------
+
+  [*] Arcade-style gameplay — easy to pick up, hard to master
+
+  [*] Dash mechanic — use your stamina bar strategically
+      to escape
+
+  [*] High score tracking — compete with fellow testers
+
+  [*] Multi-language support — English, Vietnamese, Chinese
+
+------------------------------------------------------------
+WHAT WE ASK
+------------------------------------------------------------
+
+  >> Play at least one full session
+
+  >> Report any bugs or unusual behaviour via the feedback form
+
+  >> Keep feedback constructive — this is an early build
+
+------------------------------------------------------------
+JOIN THE TESTER PROGRAM
+------------------------------------------------------------
+
+Click or paste the following link into your browser:
+
+  {{LANDING_URL}}
+
+------------------------------------------------------------
+NovaBit Studios · Fictional indie game studio
+Pixel Chaser · Beta 0.0.0.1
+
+This invitation was sent as part of a closed beta recruitment
+effort. If you believe you received this in error, simply
+disregard it.
+============================================================
