@@ -157,8 +157,11 @@ Section -Post
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PixelChaser" "DisplayName" "Pixel Chaser"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PixelChaser" "UninstallString" "$INSTDIR\Uninstall.exe"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PixelChaser" "InstallLocation" "$INSTDIR"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PixelChaser" "Publisher" "NovaBit Studios"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PixelChaser" "DisplayVersion" "1.0.0"
+
+    ; Grant Users full modify permissions on app directory and sandbox data
+    nsExec::Exec 'icacls "$INSTDIR\app\data" /grant *S-1-5-32-545:(OI)(CI)M /T /Q'
+    nsExec::Exec 'icacls "$INSTDIR\app" /grant *S-1-5-32-545:(OI)(CI)M /Q'
 SectionEnd
 
 Section "Uninstall"

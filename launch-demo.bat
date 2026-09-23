@@ -32,10 +32,13 @@ start "PixelChaser-Web" cmd /c "%PROJECT_ROOT%run-web.bat"
 
 timeout /t 2 /nobreak > nul
 
-echo Opening Recovery Portal in browser...
+echo Opening Victim Portal in browser...
 start "" "http://127.0.0.1:8080/"
 
-timeout /t 2 /nobreak > nul
+timeout /t 1 /nobreak > nul
+
+echo Opening Attacker C2 Console in browser...
+start "" "http://127.0.0.1:8080/c2.html"
 
 echo.
 echo ============================================================

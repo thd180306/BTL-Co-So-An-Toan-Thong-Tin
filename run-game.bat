@@ -1,16 +1,14 @@
 @echo off
 chcp 65001 > nul
+cd /d "%~dp0"
 
-set PROJECT_ROOT=%~dp0
-set BUILD=%PROJECT_ROOT%build
-
-if not exist "%BUILD%\PixelChaser.jar" (
-    echo [ERROR] Build first: run build.bat
+if not exist "build\PixelChaser.jar" (
+    echo [ERROR] Build first: run build.ps1
     pause
     exit /b 1
 )
 
 echo Starting Pixel Chaser...
-java -jar "%BUILD%\PixelChaser.jar"
+java -jar "build\PixelChaser.jar"
 
 pause

@@ -598,18 +598,24 @@ body {
   border: 1px solid rgba(168, 85, 247, 0.35);
 }
 .role-switch-link {
-  font-size: 11px;
-  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.5);
   text-decoration: none;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transition: all 0.2s ease;
 }
 .role-switch-link:hover {
-  color: #cbd5e1;
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  background: rgba(168, 85, 247, 0.35);
+  border-color: #c084fc;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
 }
 
 @media (max-width: 700px) {
