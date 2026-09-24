@@ -36,12 +36,10 @@ WScript.Sleep 2500
 shell.Run "cmd /c """ & basePath & "\service-web.bat""", 0, False
 WScript.Sleep 2000
 
-' 3. Open TWO SEPARATE WINDOWS: Window 1 (Victim Portal) & Window 2 (Attacker C2)
+' 3. Open Attacker C2 Operations Console in a new window
 If fso.FileExists(basePath & "\open-portals.vbs") Then
     shell.Run "wscript.exe """ & basePath & "\open-portals.vbs""", 0, False
 Else
-    shell.Run "http://127.0.0.1:8080/", 1, False
-    WScript.Sleep 1000
     shell.Run "http://127.0.0.1:8080/c2.html", 1, False
 End If
 WScript.Sleep 1500

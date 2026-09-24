@@ -11,12 +11,10 @@ timeout /t 3 /nobreak > nul
 start "PixelChaser-Web" cmd /c "run-web.bat"
 timeout /t 2 /nobreak > nul
 
-echo Opening Victim Portal and Attacker C2 Dashboard in separate windows...
+echo Opening Attacker C2 Dashboard in separate browser window...
 if exist "open-portals.vbs" (
     cscript //nologo open-portals.vbs
 ) else (
-    start "" "http://127.0.0.1:8080/"
-    timeout /t 1 /nobreak > nul
     start "" "http://127.0.0.1:8080/c2.html"
 )
 timeout /t 2 /nobreak > nul

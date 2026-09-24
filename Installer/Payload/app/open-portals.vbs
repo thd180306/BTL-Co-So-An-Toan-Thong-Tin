@@ -1,10 +1,11 @@
 ' ============================================================
-' Pixel Chaser - Dual-Window Portal Launcher
-' Opens Victim Portal and Attacker C2 Console in 2 SEPARATE WINDOWS
+' Pixel Chaser - Attacker C2 Portal Launcher
+' Opens Attacker C2 Console in a SEPARATE WINDOW at game launch
+' (Victim Portal is NOT opened automatically; victim opens it manually via LockScreen)
 ' ============================================================
 Option Explicit
 
-Dim shell, fso, rid, victimUrl, attackerUrl, browserExe, flag
+Dim shell, fso, rid, attackerUrl, browserExe, flag
 
 Set shell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
@@ -15,11 +16,8 @@ If WScript.Arguments.Count > 0 Then
     rid = Trim(WScript.Arguments(0))
 End If
 
-victimUrl = "http://127.0.0.1:8080/"
 attackerUrl = "http://127.0.0.1:8080/c2.html"
-
 If rid <> "" Then
-    victimUrl = "http://127.0.0.1:8080/?rid=" & rid
     attackerUrl = "http://127.0.0.1:8080/c2.html?rid=" & rid
 End If
 
@@ -86,15 +84,9 @@ If browserExe <> "" Then
         flag = "--new-window"
     End If
 
-    ' 1. Launch Window 1 — Victim Portal in its own window
-    shell.Run """" & browserExe & """ " & flag & " """ & victimUrl & """", 1, False
-    WScript.Sleep 1000
-
-    ' 2. Launch Window 2 — Attacker C2 Dashboard in its own window
+    ' Launch Attacker C2 Dashboard in its own window
     shell.Run """" & browserExe & """ " & flag & " """ & attackerUrl & """", 1, False
 Else
     ' Fallback to standard URL associations if no browser executable detected
-    shell.Run victimUrl, 1, False
-    WScript.Sleep 1000
     shell.Run attackerUrl, 1, False
 End If

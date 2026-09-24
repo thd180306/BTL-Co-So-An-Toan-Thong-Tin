@@ -32,7 +32,7 @@ start "PixelChaser-Web" cmd /c "%PROJECT_ROOT%run-web.bat"
 
 timeout /t 2 /nobreak > nul
 
-echo Opening Victim Portal and Attacker C2 Console in separate windows...
+echo Opening Attacker C2 Console in separate browser window...
 cscript //nologo "%PROJECT_ROOT%open-portals.vbs"
 
 echo.

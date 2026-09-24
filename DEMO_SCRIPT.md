@@ -179,24 +179,15 @@ File Explorer mở thư mục `Lab_sandbox\working\RCV-...\`
 
 > "4 file ban đầu bình thường bây giờ đã có đuôi `.locked`. Dữ liệu bên trong đã được mã hoá — không thể đọc được."
 
-**Action:** Switch sang Browser → `http://127.0.0.1:8080/`
+**Action:** Trên cửa sổ LockScreen, click nút **[Open Link]** (hoặc `[Check Payment]`) ở mục Recovery Portal để mở trang giải mã cá nhân của nạn nhân: `http://127.0.0.1:8080/?rid=...`
 
-Chỉ ra phần **Live Sandbox Directory Monitor**:
-- Icon 🔒 và badge **ENCRYPTED (.locked)** trên mỗi file
-
-> "Recovery Portal cũng theo dõi trực tiếp thư mục này và hiển thị trạng thái file real-time."
+> "Cửa sổ nạn nhân không tự ý bung lên tràn lan mà nạn nhân chủ động mở qua link được cấp trên LockScreen."
 
 ---
 
-### [4:30–5:30] PHASE 7 — Recovery Portal (Attacker side)
-
-> "Bây giờ chuyển sang góc nhìn của **kẻ tấn công**. Recovery Portal là công cụ của attacker."
-
-**Action:** Kéo scroll xuống phần **Attacker C2 Database Live Inspector**.
-
-Chỉ ra 3 tab:
-
 ### [4:30–5:30] PHASE 7 — Phân chia vai trò 2 bên (Victim vs Attacker C2)
+
+> "Hệ thống phân định ranh giới tuyệt đối giữa 2 vai trò: Nạn nhân bị kiểm soát hoàn toàn, Kẻ tấn công nắm toàn quyền C2."
 
 **Trình chiếu 2 cửa sổ / 2 máy:**
 
@@ -246,9 +237,9 @@ Quan sát diễn biến thời gian thực:
 
 Sequence thao tác:
 1. Click **[Paste]** (hoặc Ctrl+V) vào ô *Enter Private Key (Base64)*
-2. Thấy chuỗi Base64 dài điền vào ô. Ngay lập tức:
-   - Thanh trạng thái chuyển sang: *"Private Key entered. You may now [Decrypt] or close this window."*
-   - Nút **[Close Window]** được kích hoạt (sáng lên), và nút **✕** của cửa sổ cũng được mở khóa — có thể tắt ứng dụng mà không cần phím tắt đặc biệt nào.
+2. Thấy chuỗi Base64 dài điền vào ô.
+   - Thanh trạng thái hiển thị: *"Private Key entered. Click [Decrypt] to verify key and restore files."*
+   - Cửa sổ vẫn tiếp tục khóa bảo vệ, nút **[Close Window]** vẫn ở trạng thái vô hiệu hóa (disabled) để đảm bảo nạn nhân phải bấm giải mã thành công mới được phép thoát.
 3. Click nút đỏ **[Decrypt]**
 
 > "Private key được truyền trực tiếp vào thuật toán giải mã. Hệ thống dùng đúng `CryptoUtils.decryptFile()` — cùng hàm của nhóm Crypto viết, không thêm gì."
@@ -258,7 +249,7 @@ Quan sát:
 - Sau ~1–2 giây: dialog **✔ DECRYPTION SUCCESSFUL!** — `4 files restored`
 - Countdown đổi sang **RECOVERED** (màu xanh)
 - Payment Status đổi sang **COMPLETED**
-- Lúc này có thể click **[Close Window]** hoặc nút **✕** trên thanh tiêu đề để đóng cửa sổ an toàn.
+- **Mở khóa đóng ứng dụng**: Lúc này `isDecrypted` đã đạt `true`, nút **[Close Window]** được kích hoạt (sáng lên), và nút **✕** trên thanh tiêu đề cho phép đóng cửa sổ an toàn.
 
 **Action:** Click **[Open Demo Folder]** lần nữa. File Explorer hiển thị 4 file — **không còn đuôi `.locked`**.
 

