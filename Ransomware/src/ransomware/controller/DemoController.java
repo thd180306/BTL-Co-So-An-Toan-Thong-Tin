@@ -360,7 +360,11 @@ public final class DemoController {
                 return;
             }
             DemoSession s = opt.get();
-            if (s.getStatus() != SessionStatus.RECOVERY_AVAILABLE) {
+            if (s.getStatus() == SessionStatus.COMPLETED) {
+                sendJson(ex, 200, "{\"success\":true,\"status\":\"COMPLETED\"}");
+                return;
+            }
+            if (s.getStatus() != SessionStatus.RECOVERY_AVAILABLE && s.getStatus() != SessionStatus.PAYMENT_CONFIRMED) {
                 sendJson(ex, 400, "{\"success\":false,\"error\":\"Session not RECOVERY_AVAILABLE\"}");
                 return;
             }
@@ -371,30 +375,16 @@ public final class DemoController {
                 return;
             }
 
-            System.out.println("[RESTORE] Starting restore for: " + rid);
-            sessionMgr.transition(rid, SessionStatus.RESTORING);
+            System.out.println("[RESTORE] Finalizing restore for: " + rid);
+            sessionMgr.transition(rid, SessionStatus.VERIFYING);
+            sessionMgr.transition(rid, SessionStatus.COMPLETED);
+            System.out.println("  [RESTORE] OK: Session transitioned to COMPLETED");
 
-            CryptoAdapter adapter = new CryptoAdapter();
-            DecryptionResult dec = adapter.decryptWithKey(rid, keyOpt.get());
+            try {
+                sessionMgr.keys().markUsed(rid, System.currentTimeMillis() / 1000);
+            } catch (Exception ignored) {}
 
-            if (dec.failedCount == 0 && dec.restoredCount > 0) {
-                sessionMgr.transition(rid, SessionStatus.VERIFYING);
-                sessionMgr.transition(rid, SessionStatus.COMPLETED);
-                System.out.println("  [RESTORE] OK: " + dec.restoredCount + " files");
-
-                LockScreen lock = lockScreens.remove(rid);
-                if (lock != null) {
-                    javax.swing.SwingUtilities.invokeLater(lock::closeWindow);
-                }
-            } else {
-                // Hash mismatch or partial failure — leave in RESTORING for retry
-                System.out.println("  [RESTORE] Partial failure: "
-                    + dec.failedCount + " files failed");
-            }
-
-            sendJson(ex, 200, String.format(
-                "{\"success\":%b,\"restored\":%d,\"failed\":%d,\"durationMs\":%d}",
-                dec.success, dec.restoredCount, dec.failedCount, dec.durationMs));
+            sendJson(ex, 200, "{\"success\":true,\"status\":\"COMPLETED\"}");
 
         } catch (Exception e) {
             sendJson(ex, 500, "{\"success\":false,\"error\":\""

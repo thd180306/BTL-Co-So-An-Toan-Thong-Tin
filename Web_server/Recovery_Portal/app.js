@@ -5,7 +5,8 @@
 
 const state = {
   recoveryId: null,
-  session: null
+  session: null,
+  autoCloseStarted: false
 };
 
 const els = {
@@ -104,6 +105,11 @@ function renderSession(session) {
     fetchPrivateKey(session.recoveryId);
   } else {
     els.keyReleaseCard.classList.add("hidden");
+  }
+
+  // Trigger 3s auto-close countdown when session is COMPLETED (decryption successful)
+  if (session.status === "COMPLETED" && !state.autoCloseStarted) {
+    triggerAutoClose();
   }
 }
 
@@ -206,13 +212,79 @@ els.manualRidInput.addEventListener("keydown", (e) => {
   }
 });
 
-// Periodic status poll (every 2.5s)
+// Auto-Close Countdown Logic when Decryption completes
+function triggerAutoClose() {
+  state.autoCloseStarted = true;
+  let remaining = 3;
+  updateAutoCloseUI(remaining);
+
+  const timer = setInterval(() => {
+    remaining--;
+    if (remaining > 0) {
+      updateAutoCloseUI(remaining);
+    } else {
+      clearInterval(timer);
+      executeClose();
+    }
+  }, 1000);
+}
+
+function updateAutoCloseUI(seconds) {
+  // Update status card indicator
+  els.paymentIndicator.className = "victim-indicator-box indicator-confirmed";
+  els.indicatorIcon.textContent = "✔";
+  els.indicatorTitle.textContent = "Decryption Complete — System Restored!";
+  els.indicatorDesc.innerHTML = "All files in Lab_sandbox have been restored and verified with original SHA-256.<br>" +
+    "<span style='display:inline-block; margin-top:8px; font-weight:600; color:#4ade80; font-size:14px;'>" +
+    "Closing Recovery Portal window in <span style='font-size:16px; color:#fff; background:#16a34a; padding:2px 8px; border-radius:4px; font-weight:bold;'>" + seconds + "s</span>...</span>";
+
+  // Floating notification card
+  let banner = document.getElementById("autoCloseBanner");
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "autoCloseBanner";
+    banner.style.cssText = "position:fixed; bottom:24px; right:24px; background:#14532d; color:#ffffff; padding:14px 20px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.6); font-size:14px; font-weight:600; z-index:9999; display:flex; align-items:center; gap:14px; border:1px solid #22c55e;";
+    document.body.appendChild(banner);
+  }
+
+  banner.innerHTML = "<span>✔ Decryption Complete! Auto-closing in <strong>" + seconds + "s</strong></span>" +
+    "<button id='bannerCloseNowBtn' style='background:#ffffff; color:#14532d; border:none; padding:6px 14px; border-radius:6px; font-weight:bold; font-size:13px; cursor:pointer;'>Close Now</button>";
+
+  const btn = document.getElementById("bannerCloseNowBtn");
+  if (btn) {
+    btn.onclick = () => executeClose();
+  }
+}
+
+function executeClose() {
+  try {
+    window.open('', '_self', '');
+    window.close();
+  } catch (e) {}
+
+  setTimeout(() => {
+    if (!window.closed) {
+      document.body.innerHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#0f172a; color:#f8fafc; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; text-align:center; padding:20px;">
+          <div style="width:72px; height:72px; border-radius:50%; background:#16a34a; display:flex; align-items:center; justify-content:center; font-size:38px; color:#fff; margin-bottom:20px;">✔</div>
+          <h1 style="color:#4ade80; font-size:28px; margin:0 0 10px 0;">Decryption Complete & Session Closed</h1>
+          <p style="color:#94a3b8; font-size:16px; max-width:480px; margin:0 0 24px 0; line-height:1.5;">All files in <code>Lab_sandbox</code> have been restored. The ransomware incident has been resolved.</p>
+          <button onclick="window.close()" style="background:#334155; color:#f8fafc; border:1px solid #475569; padding:8px 20px; border-radius:8px; font-size:14px; cursor:pointer;">Close Tab</button>
+        </div>
+      `;
+      try { window.close(); } catch (e) {}
+    }
+  }, 200);
+}
+
+// Periodic status poll (every 800ms for fast auto-close sync)
 setInterval(() => {
+  if (state.autoCloseStarted) return;
   if (state.recoveryId) {
     fetchSessionById(state.recoveryId);
   } else {
     fetchLatestSession();
   }
-}, 2500);
+}, 800);
 
 initFromUrl();

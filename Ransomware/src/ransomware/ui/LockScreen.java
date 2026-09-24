@@ -56,6 +56,7 @@ public final class LockScreen {
 
     private int remainingSeconds;
     private Timer timer;
+    private Timer autoCloseTimer;
     private boolean isDecrypted = false;
 
     public LockScreen(String recoveryId,
@@ -510,6 +511,7 @@ public final class LockScreen {
         closeButton.setToolTipText("Available once files are successfully decrypted");
         closeButton.addActionListener(e -> {
             if (isDecrypted) {
+                if (autoCloseTimer != null) autoCloseTimer.stop();
                 closeWindow();
             }
         });
@@ -569,7 +571,7 @@ public final class LockScreen {
                         isDecrypted = true;
                         if (timer != null) timer.stop();
 
-                        statusMessageLabel.setText("✔ Decryption successful! " + res.restoredCount + " files restored.");
+                        statusMessageLabel.setText("✔ Decryption successful! " + res.restoredCount + " files restored. Auto-closing in 3s...");
                         statusMessageLabel.setForeground(new Color(80, 255, 120));
 
                         countdownLabel1.setText("RECOVERED");
@@ -579,18 +581,15 @@ public final class LockScreen {
                         paymentStatusLabel.setText("COMPLETED");
                         paymentStatusLabel.setForeground(new Color(80, 255, 120));
 
-                        JOptionPane.showMessageDialog(frame,
-                            "<html><div style='width:340px;'>" +
-                            "<h2 style='color:#008800;'>✔ DECRYPTION SUCCESSFUL!</h2>" +
-                            "<p>All <b>" + res.restoredCount + "</b> files in <code>Lab_sandbox\\working\\" + recoveryId + "</code> " +
-                            "have been successfully decrypted and verified.</p>" +
-                            "<p>Integrity check: <b>PASSED (SHA-256)</b>.<br>You may now close this window safely.</p>" +
-                            "</div></html>",
-                            "Recovery Completed", JOptionPane.INFORMATION_MESSAGE);
-
-                        // Allow closing the window normally
+                        // Allow closing the window immediately via Close Window button or X button
                         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        if (closeButton != null) closeButton.setEnabled(true);
+                        if (closeButton != null) {
+                            closeButton.setEnabled(true);
+                            closeButton.setText("Close Window (3s)");
+                        }
+
+                        // Start 3-second auto-close countdown
+                        startAutoCloseCountdown(3);
                     } else {
                         String errMsg = (res != null && res.failedCount > 0)
                             ? "Failed to decrypt " + res.failedCount + " files."
@@ -665,11 +664,32 @@ public final class LockScreen {
     }
 
     public void closeWindow() {
+        if (autoCloseTimer != null) autoCloseTimer.stop();
         if (timer != null) timer.stop();
         SwingUtilities.invokeLater(() -> {
             frame.setVisible(false);
             frame.dispose();
         });
+    }
+
+    private void startAutoCloseCountdown(int initialSeconds) {
+        if (autoCloseTimer != null && autoCloseTimer.isRunning()) {
+            autoCloseTimer.stop();
+        }
+        final int[] remaining = {initialSeconds};
+        autoCloseTimer = new Timer(1000, e -> {
+            remaining[0]--;
+            if (remaining[0] > 0) {
+                if (closeButton != null) {
+                    closeButton.setText("Close Window (" + remaining[0] + "s)");
+                }
+                statusMessageLabel.setText("✔ Decryption successful! All files restored. Auto-closing in " + remaining[0] + "s...");
+            } else {
+                if (autoCloseTimer != null) autoCloseTimer.stop();
+                closeWindow();
+            }
+        });
+        autoCloseTimer.start();
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────
